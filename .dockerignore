@@ -1,0 +1,13 @@
+node_modules
+npm-debug.log
+.env
+.DS_Store
+*.md
+test/
+logs/*.log
+.git
+.gitignore
+README.md
+.editorconfig
+.eslintrc*
+.prettierrc*

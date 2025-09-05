@@ -1,0 +1,36 @@
+[Unit]
+Description=Wall Bounce Tech Support Helper MCP Server
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=nodejs
+Group=nodejs
+WorkingDirectory=/opt/wall-bounce-mcp
+ExecStart=/usr/bin/node src/server.js
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=wall-bounce-mcp
+
+# Environment variables
+Environment=NODE_ENV=production
+Environment=PORT=3003
+Environment=LOG_LEVEL=info
+EnvironmentFile=/opt/wall-bounce-mcp/.env
+
+# Security settings
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/wall-bounce-mcp/logs
+
+# Resource limits
+LimitNOFILE=65536
+MemoryMax=1G
+
+[Install]
+WantedBy=multi-user.target

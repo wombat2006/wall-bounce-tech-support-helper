@@ -5,6 +5,7 @@
  */
 
 import * as dotenv from 'dotenv';
+import { createServer } from 'http';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
@@ -114,12 +115,80 @@ class WallBounceApp {
   }
 
   /**
+   * Setup HTTP health check server
+   */
+  setupHealthServer() {
+    const port = process.env.PORT || 3000;
+    const logLevel = process.env.LOG_LEVEL || 'info';
+    
+    this.healthServer = createServer((req, res) => {
+      if (req.url === '/health' || req.url === '/data/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          status: 'ok',
+          timestamp: new Date().toISOString(),
+          version: '1.0.0',
+          uptime: process.uptime(),
+          openai: this.openaiProvider.isAvailable(),
+          gemini: this.geminiProvider.isAvailable()
+        }));
+      } else if (req.url === '/') {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end('Wall Bounce MCP Server is running');
+      } else {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Not Found');
+      }
+    });
+
+    this.healthServer.listen(port, () => {
+      if (logLevel === 'info' || logLevel === 'debug') {
+        console.error(`[INFO] Health check server listening on http://localhost:${port}`);
+        console.error(`[INFO] MCP Server providers: OpenAI=${this.openaiProvider.isAvailable()}, Gemini=${this.geminiProvider.isAvailable()}`);
+      }
+    });
+  }
+
+  /**
    * Start the server
    */
   async start() {
+    // Setup health check HTTP server
+    this.setupHealthServer();
+    
+    // Setup graceful shutdown
+    process.on('SIGINT', () => this.gracefulShutdown('SIGINT'));
+    process.on('SIGTERM', () => this.gracefulShutdown('SIGTERM'));
+    
+    // Start MCP server on stdio
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error('MCP Wall Bounce Tech Support Helper server started');
+    
+    const logLevel = process.env.LOG_LEVEL || 'info';
+    if (logLevel === 'info' || logLevel === 'debug') {
+      console.error('[INFO] MCP Wall Bounce Tech Support Helper server started');
+    }
+  }
+
+  /**
+   * Graceful shutdown handler
+   */
+  gracefulShutdown(signal) {
+    const logLevel = process.env.LOG_LEVEL || 'info';
+    if (logLevel === 'info' || logLevel === 'debug') {
+      console.error(`[INFO] Received ${signal}. Graceful shutdown starting...`);
+    }
+    
+    if (this.healthServer) {
+      this.healthServer.close(() => {
+        if (logLevel === 'info' || logLevel === 'debug') {
+          console.error('[INFO] Health server closed');
+        }
+        process.exit(0);
+      });
+    } else {
+      process.exit(0);
+    }
   }
 }
 

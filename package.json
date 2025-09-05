@@ -1,23 +1,64 @@
 {
-  "name": "mcp-server-chatgpt",
+  "name": "wall-bounce-tech-support-helper",
   "version": "1.0.0",
-  "description": "MCP server for OpenAI ChatGPT and Google Gemini integration",
+  "description": "A Model Context Protocol (MCP) server that provides integration with OpenAI GPT and Google Gemini models, featuring innovative wall bounce conversations for enhanced brainstorming and problem-solving",
   "type": "module",
   "main": "src/server.js",
+  "bin": {
+    "wall-bounce-mcp": "src/cli.js"
+  },
   "scripts": {
     "start": "node src/server.js",
     "start:old": "node openai-mcp.js",
     "test": "node --test",
     "test:watch": "node --test --watch",
-    "test:coverage": "node --test --experimental-test-coverage"
+    "test:coverage": "node --test --experimental-test-coverage",
+    "prepublishOnly": "npm test"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "dotenv": "^16.4.5",
     "openai": "^4.67.3",
-    "@google/genai": "^0.3.0"
+    "@google/genai": "^0.3.0",
+    "commander": "^12.1.0",
+    "inquirer": "^10.2.2"
   },
-  "keywords": ["mcp", "openai", "chatgpt", "gemini", "google-ai"],
-  "author": "",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "src/",
+    "README.md",
+    ".env.example",
+    "ecosystem.config.js",
+    "Dockerfile",
+    ".dockerignore",
+    "docker-compose.yml",
+    "nginx.conf",
+    "wall-bounce-mcp.service",
+    "deploy.sh"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wombat2006/wall-bounce-tech-support-helper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wombat2006/wall-bounce-tech-support-helper/issues"
+  },
+  "homepage": "https://github.com/wombat2006/wall-bounce-tech-support-helper#readme",
+  "keywords": [
+    "mcp", 
+    "model-context-protocol", 
+    "openai", 
+    "chatgpt", 
+    "gpt-5", 
+    "gemini", 
+    "google-ai", 
+    "wall-bounce", 
+    "ai-conversation", 
+    "brainstorming", 
+    "tech-support"
+  ],
+  "author": "wombat2006",
   "license": "MIT"
 }

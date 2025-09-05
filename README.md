@@ -41,12 +41,135 @@ GEMINI_MODEL=gemini-1.5-pro
 
 ## Usage
 
-Start the MCP server:
+### Quick Start with Interactive Setup
+
+1. Run the interactive setup to configure API keys:
+```bash
+npx wall-bounce-mcp setup
+```
+
+2. Start the server:
 ```bash
 npm start
 ```
 
-The server will start and listen for MCP protocol messages via stdio.
+### Production Deployment
+
+#### Option 1: PM2 (Recommended)
+```bash
+# Install PM2 globally
+npm install -g pm2
+
+# Start with PM2 using ecosystem config
+pm2 start ecosystem.config.js
+
+# Monitor
+pm2 status
+pm2 logs wall-bounce-mcp
+pm2 monit
+
+# Auto-restart on system reboot
+pm2 startup
+pm2 save
+```
+
+#### Option 2: Docker
+```bash
+# Build image
+docker build -t wall-bounce-mcp .
+
+# Run container
+docker run -d --name wall-bounce-mcp \
+  --env-file .env \
+  -p 3000:3000 \
+  wall-bounce-mcp
+
+# Check health
+curl http://localhost:3000/health
+```
+
+#### Option 3: Direct Usage
+```bash
+# Basic start
+npm start
+
+# With custom port and log level
+PORT=3001 LOG_LEVEL=debug npm start
+```
+
+### Health Check
+
+The server includes a built-in health check endpoint:
+
+```bash
+# Check if server is running
+curl http://localhost:3000/health
+
+# Or use the CLI
+npx wall-bounce-mcp health
+```
+
+The server will start and listen for MCP protocol messages via stdio, while also providing an HTTP health check endpoint.
+
+## Production Deployment
+
+### Automated Deployment
+
+Use the included deployment script for automated setup:
+
+```bash
+# Make script executable
+chmod +x deploy.sh
+
+# Run deployment
+./deploy.sh
+```
+
+The script will guide you through choosing the best deployment method for your environment.
+
+### Manual Deployment Options
+
+#### Option 1: Docker Compose (Full Stack)
+```bash
+# Copy environment file
+cp .env.example .env
+# Edit .env with your API keys
+
+# Start full stack with nginx reverse proxy
+docker-compose up -d
+
+# Access via reverse proxy
+curl https://yourdomain.com/health
+```
+
+#### Option 2: Systemd Service
+```bash
+# Copy service file
+sudo cp wall-bounce-mcp.service /etc/systemd/system/
+
+# Enable and start service
+sudo systemctl enable wall-bounce-mcp
+sudo systemctl start wall-bounce-mcp
+
+# Check status
+sudo systemctl status wall-bounce-mcp
+```
+
+### Nginx Reverse Proxy
+
+The included `nginx.conf` provides:
+- HTTPS termination
+- Security headers
+- Health check proxying at `/health`
+- API proxying at `/api/wall-bounce/`
+- CORS support
+
+### Public Access URLs
+
+When deployed with domain configuration:
+- **Health Check**: `https://yourdomain.com/health`
+- **API Endpoint**: `https://yourdomain.com/api/wall-bounce/`
+- **Direct Access**: `http://your-ip:3003/data/health`
 
 ## Available Tools
 
