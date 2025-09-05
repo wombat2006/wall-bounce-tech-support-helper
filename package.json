@@ -1,0 +1,23 @@
+{
+  "name": "mcp-server-chatgpt",
+  "version": "1.0.0",
+  "description": "MCP server for OpenAI ChatGPT and Google Gemini integration",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "start:old": "node openai-mcp.js",
+    "test": "node --test",
+    "test:watch": "node --test --watch",
+    "test:coverage": "node --test --experimental-test-coverage"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "openai": "^4.67.3",
+    "@google/genai": "^0.3.0"
+  },
+  "keywords": ["mcp", "openai", "chatgpt", "gemini", "google-ai"],
+  "author": "",
+  "license": "MIT"
+}
