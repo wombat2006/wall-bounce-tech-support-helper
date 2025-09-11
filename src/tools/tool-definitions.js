@@ -11,8 +11,8 @@ export const toolDefinitions = [
       properties: {
         model: {
           type: 'string',
-          description: 'Model to use (e.g., gpt-5-2025-08-07, gpt-5, gpt-5-mini, gpt-4o, gpt-4, etc.)',
-          default: process.env.OPENAI_MODEL || 'gpt-4',
+          description: 'Model to use (e.g., gpt-5, gpt-5-mini, gpt-4o, gpt-4, etc.)',
+          default: process.env.OPENAI_MODEL || 'gpt-4o',
         },
         messages: {
           type: 'array',
@@ -47,14 +47,14 @@ export const toolDefinitions = [
   },
   {
     name: 'chat_with_gemini',
-    description: 'Chat with Google Gemini models (e.g., gemini-2.0-flash-001, gemini-1.5-pro-latest, gemini-1.5-flash-001, etc.)',
+    description: 'Chat with Google Gemini models (e.g., gemini-2.5-pro, gemini-2.0-flash-thinking-exp-1219, gemini-2.0-flash-exp, etc.)',
     inputSchema: {
       type: 'object',
       properties: {
         model: {
           type: 'string',
-          description: 'Gemini model to use (e.g., gemini-2.0-flash-001, gemini-1.5-pro-latest, gemini-1.5-flash-001)',
-          default: process.env.GEMINI_MODEL || 'gemini-2.0-flash-001',
+          description: 'Gemini model to use (e.g., gemini-2.5-pro, gemini-2.0-flash-thinking-exp-1219, gemini-2.0-flash-exp)',
+          default: process.env.GEMINI_MODEL || 'gemini-2.5-pro',
         },
         messages: {
           type: 'array',
@@ -100,12 +100,12 @@ export const toolDefinitions = [
         model1: {
           type: 'string',
           description: 'First AI model to use (OpenAI model name)',
-          default: process.env.OPENAI_MODEL || 'gpt-4',
+          default: process.env.OPENAI_MODEL || 'gpt-4o',
         },
         model2: {
           type: 'string',
           description: 'Second AI model to use (Gemini model name)',
-          default: process.env.GEMINI_MODEL || 'gemini-2.0-flash-001',
+          default: process.env.GEMINI_MODEL || 'gemini-2.5-pro',
         },
         rounds: {
           type: 'number',

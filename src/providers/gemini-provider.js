@@ -9,11 +9,13 @@ export class GeminiProvider {
   constructor(apiKey) {
     this.client = apiKey ? new GoogleGenAI({ apiKey }) : null;
     this.availableModels = [
+      'gemini-2.5-pro',
+      'gemini-2.0-flash-thinking-exp-1219',
+      'gemini-2.0-flash-exp',
       'gemini-2.0-flash-001',
-      'gemini-1.5-pro-latest',
       'gemini-1.5-pro-002',
-      'gemini-1.5-flash-001',
-      'gemini-1.5-flash-002'
+      'gemini-1.5-flash-002',
+      'gemini-1.5-flash-8b-001'
     ];
   }
 
